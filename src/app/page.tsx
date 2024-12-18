@@ -3,6 +3,7 @@ import HomeCrousel from '@/components/HomeCrousel.jsx'
 import CategoryList from '@/components/CategoryList.jsx'
 import SearchBar from '@/components/SearchBar.jsx'
 import PopularProducts from '@/components/PopularProducts.jsx'
+import Footer from '@/components/Footer.jsx'
 import Navbar from "@/components/Navbar";
 
 export default function Home() {
@@ -14,7 +15,9 @@ export default function Home() {
      <HomeCrousel/>
      <CategoryList/>
      <PopularProducts/>
+    
     </div>
+    <Footer/>
     </>
   );
 }

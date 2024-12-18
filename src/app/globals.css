@@ -63,6 +63,25 @@ body {
   }
 }
 
+* {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+*::-webkit-scrollbar {
+  width: 5px;
+}
+
+*::-webkit-scrollbar-track {
+  background: var(--bg-clr);
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: rgb(214, 213, 213);
+  border-radius: 20px;
+}
 
 @layer base {
   * {

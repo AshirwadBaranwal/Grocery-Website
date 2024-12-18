@@ -1,8 +1,6 @@
 "use client";
 import Image from "next/image";
 import React from "react";
-import { LayoutGrid } from "lucide-react";
-import { Search } from "lucide-react";
 import { Button } from "./ui/button";
 import { ShoppingCart } from "lucide-react";
 import Link from "next/link";
@@ -10,13 +8,14 @@ import { useGrocery } from "@/context/GroceryContext";
 import { LoginLink, LogoutLink } from "@kinde-oss/kinde-auth-nextjs/components";
 import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
 import SearchBar from "./SearchBar";
+import Dropdown from "@/components/Dropdown.jsx";
 
 const Navbar = () => {
   const { cart } = useGrocery();
   const { user, getUser } = useKindeBrowserClient();
   return (
     <>
-      <div className="flex items-center w-full fixed top-0  z-50 bg-white justify-between pr-5 md:px-10 py-3 md:py-5 border border-gray-300">
+      <div className="flex items-center w-full fixed top-0  z-50 bg-white justify-between pr-5 md:px-10 py-3 md:py-3 border border-gray-300">
         <div className="flex">
           <Link href="/">
             <Image src="/logo.png" height={70} width={120} alt="logo" />
@@ -32,6 +31,7 @@ const Navbar = () => {
           </span> */}
           <SearchBar className=" hidden md:flex ml-20 " />
         </div>
+
         <div className="flex items-center gap-5 md:gap-10">
           <Link href="/cart">
             <span className="cursor-pointer relative">
@@ -41,7 +41,7 @@ const Navbar = () => {
               </span>
             </span>
           </Link>
-          {!user ? (
+          {/* {!user ? (
             <LoginLink>
               <Button>Login</Button>
             </LoginLink>
@@ -49,7 +49,8 @@ const Navbar = () => {
             <LogoutLink>
               <Button>Logout</Button>
             </LogoutLink>
-          )}
+          )} */}
+          <Dropdown />
         </div>
       </div>
     </>

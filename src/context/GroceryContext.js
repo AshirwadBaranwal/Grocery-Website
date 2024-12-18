@@ -41,7 +41,7 @@ export const GroceryProvider = ({ children }) => {
       console.log(existingCartItem);
       if (existingCartItem) {
         // Product already in cart, increase quantity
-        const updatedQuantity = existingCartItem.quantity + 1;
+        const updatedQuantity = existingCartItem.quantity + product.quantity;
 
         // Update the quantity in the database
         const { error: updateError } = await supabase
@@ -60,7 +60,7 @@ export const GroceryProvider = ({ children }) => {
                 : item
             )
           );
-          toast.success("Item quantity updated");
+          toast.success("Item is already in cart,Item quantity updated");
         }
       } else {
         const { data, error } = await supabase
