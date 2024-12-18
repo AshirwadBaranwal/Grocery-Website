@@ -8,7 +8,7 @@ import toast from "react-hot-toast";
 const GroceryContext = createContext();
 
 export const GroceryProvider = ({ children }) => {
-  const { user, getUser } = useKindeBrowserClient();
+  const { user } = useKindeBrowserClient();
   const [groceryProducts, setGroceryProducts] = useState([]);
   const [cart, setCart] = useState([]);
 
@@ -80,7 +80,7 @@ export const GroceryProvider = ({ children }) => {
 
   // Update cart item
   const updateCartItem = async (id, updatedData) => {
-    const { data, error } = await supabase
+    const { error } = await supabase
       .from("cart")
       .update(updatedData)
       .eq("id", id);
