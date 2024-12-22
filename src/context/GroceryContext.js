@@ -11,14 +11,17 @@ export const GroceryProvider = ({ children }) => {
   const { user } = useKindeBrowserClient();
   const [groceryProducts, setGroceryProducts] = useState([]);
   const [cart, setCart] = useState([]);
+  const [orders, setOrders] = useState([]); // New orders state
 
   // Fetch all products
   const fetchProducts = async () => {
-    let { data: PopularProducts, error } = await supabase
-      .from("PopularProducts")
+    let { data: AllProducts, error } = await supabase
+      .from("AllProducts")
       .select("*");
     if (error) console.error(error);
-    else setGroceryProducts(PopularProducts);
+    else {
+      setGroceryProducts(AllProducts);
+    }
   };
 
   // Fetch cart data
@@ -103,11 +106,80 @@ export const GroceryProvider = ({ children }) => {
       toast.error("Item removed from cart");
     }
   };
+  // Fetch orders data
+  const fetchOrders = async (email) => {
+    const { data, error } = await supabase
+      .from("Orders")
+      .select("*")
+      .eq("user", email); // Filter by user email
+    if (error) {
+      console.error("Error fetching orders:", error);
+    } else {
+      const parsedOrders = data.map((order) => ({
+        ...order,
+        cartItems: JSON.parse(order.cartItems),
+      }));
+      setOrders(parsedOrders); // Update state with parsed orders
+    }
+  };
+
+  // Add cart items to the order table
+  const addToOrder = async () => {
+    try {
+      if (!cart.length) {
+        toast.error("Your cart is empty!");
+        return;
+      }
+
+      const orderData = {
+        cartItems: JSON.stringify(cart), // Convert the cart state to JSON
+        status: "pending", // Set default order status
+        user: user.email, // Add user email
+      };
+
+      // Insert the order into the Supabase order table
+      const { data, error } = await supabase
+        .from("Orders")
+        .insert(orderData)
+        .select("*"); // Ensure the inserted data is returned;
+
+      if (error) {
+        console.error("Error adding order:", error);
+        toast.error("Error placing order");
+      } else {
+        // Update the orders state with the new order
+        setOrders((prev) => [...prev, ...data]);
+
+        // Clear the cart state
+        setCart([]);
+
+        // Optionally, delete items from the cart in the database
+        const { error: cartClearError } = await supabase
+          .from("cart")
+          .delete()
+          .in(
+            "id",
+            cart.map((item) => item.id)
+          );
+
+        if (cartClearError) {
+          console.error("Error clearing cart:", cartClearError);
+          toast.error("Error clearing cart after placing order");
+        } else {
+          toast.success("Order placed successfully!");
+        }
+      }
+    } catch (error) {
+      console.error("Unexpected error:", error);
+      toast.error("Unexpected error while placing order");
+    }
+  };
 
   useEffect(() => {
     if (user) {
       fetchProducts();
       fetchCart(user.email);
+      fetchOrders(user.email);
     }
   }, [user]);
 
@@ -120,6 +192,8 @@ export const GroceryProvider = ({ children }) => {
         updateCartItem,
         deleteCartItem,
         user,
+        addToOrder,
+        orders,
       }}
     >
       {children}

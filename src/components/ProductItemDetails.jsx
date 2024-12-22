@@ -11,9 +11,9 @@ const ProductItemDetails = ({ product }) => {
   const { addToCart, user } = useGrocery();
   const [quantity, setQuantity] = useState(1);
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 bg-white text-black p-7">
+    <div className="flex flex-col items-center md:grid md:grid-cols-2 bg-white text-black p-7">
       <Image
-        src={product?.images}
+        src={product?.images.trim()}
         alt={product.name}
         height={250}
         width={250}

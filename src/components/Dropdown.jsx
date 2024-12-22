@@ -10,6 +10,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "./ui/button";
+import Link from "next/link";
 
 const Dropdown = () => {
   return (
@@ -22,7 +23,9 @@ const Dropdown = () => {
           <DropdownMenuLabel>My Account</DropdownMenuLabel>
           <DropdownMenuSeparator />
           <DropdownMenuItem>Profile</DropdownMenuItem>
-          <DropdownMenuItem>Orders</DropdownMenuItem>
+          <DropdownMenuItem>
+            <Link href="/orders">Orders</Link>
+          </DropdownMenuItem>
           <DropdownMenuItem>
             <LogoutLink>
               <p className="text-red-500">Logout</p>
