@@ -30,7 +30,7 @@ const Cart = () => {
               >
                 <span
                   className="absolute right-2 top-2 cursor-pointer"
-                  onClick={() => deleteCartItem(item.id)}
+                  onClick={() => deleteCartItem(item.slug)}
                 >
                   <X size={16} />
                 </span>
@@ -53,7 +53,9 @@ const Cart = () => {
                       className="w-7 h-7 flex justify-center items-center bg-gray-200 text-gray-700 rounded-md"
                       onClick={() =>
                         item?.quantity > 1 &&
-                        updateCartItem(item.id, { quantity: item.quantity - 1 })
+                        updateCartItem(item.slug, {
+                          quantity: item.quantity - 1,
+                        })
                       }
                     >
                       -
@@ -68,7 +70,9 @@ const Cart = () => {
                     <button
                       className="w-7 h-7 flex justify-center items-center bg-gray-200 text-gray-700 rounded-md"
                       onClick={() =>
-                        updateCartItem(item.id, { quantity: item.quantity + 1 })
+                        updateCartItem(item.slug, {
+                          quantity: item.quantity + 1,
+                        })
                       }
                     >
                       +

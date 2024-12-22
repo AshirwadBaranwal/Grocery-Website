@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect } from "react";
+import React from "react";
 import { useGrocery } from "@/context/GroceryContext"; // Assuming your context is here
 import Formatter from "../../lib/utils/Formatter.jsx";
 import OrderedCartDetailsPop from "../../components/OrderedCartDetailsPop.jsx";
@@ -14,6 +14,7 @@ const MyOrders = () => {
       0
     );
   };
+  
   if (!user) {
     return (
       <div className="flex justify-center items-center min-h-screen">
@@ -41,7 +42,7 @@ const MyOrders = () => {
           {orders.map((order) => (
             <div
               key={order.id}
-              className="  text-sm bg-white border border-green-200 p-4 rounded-lg shadow-md relative"
+              className="text-sm bg-white border  p-4 rounded-lg shadow-md relative"
             >
               <span
                 className={` top-10 lg:top-5 right-2 px-3 py-1 absolute text-xs font-medium rounded-full ${
@@ -69,7 +70,7 @@ const MyOrders = () => {
                     cart={Object.values(order.cartItems)}
                   />
                 </div>
-                <div className=" text-sm px-4 py-2 w-full  text-black text-sm font-medium flex justify-center items-center  ">
+                <div className="  px-4 py-2 w-full  text-black text-sm font-medium flex justify-center items-center  ">
                   Cancel Order
                 </div>
               </div>

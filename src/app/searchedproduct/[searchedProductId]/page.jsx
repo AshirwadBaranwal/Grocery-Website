@@ -18,7 +18,7 @@ const page = () => {
     <>
       <BackBar path="/" />
       <div className="p-10">
-        <div className="mt-16 w-fit  ">
+        <div className="mt-16">
           {renderableArray?.map((items, index) => {
             return <ProductItem key={index} productItem={items} />;
           })}

@@ -4,27 +4,22 @@ import ProductItem from "@/components/ProductItem.jsx";
 import Productloadingmodel from "@/components/Productloadingmodel.jsx";
 import { ArrowRight } from "lucide-react";
 import Link from "next/link";
-import supabase from "@/lib/SupbaseConfig";
+import { useGrocery } from "@/context/GroceryContext";
 
 const PopularProducts = () => {
   const [popularProducts, setPopularProducts] = useState([]);
+  const { groceryProducts } = useGrocery();
 
-  // Fetch all products
-
-  const fetchProducts = async () => {
-    let { data, error } = await supabase
-      .from("HomePopularProducts")
-      .select("*");
-    if (error) console.error(error);
-    else {
-      setPopularProducts(data);
-    }
+  const getPopularProducts = () => {
+    const popular = groceryProducts.filter(
+      (product) => product.isPopularProduct === true
+    );
+    setPopularProducts(popular);
   };
 
   useEffect(() => {
-    fetchProducts();
-  }, []);
-
+    getPopularProducts();
+  }, [groceryProducts]);
   if (popularProducts.length <= 0) {
     return <Productloadingmodel />;
   }

@@ -16,7 +16,7 @@ import fallback from "../../public/fallback.png";
 
 const ProductItem = ({ productItem }) => {
   return (
-    <div className=" p-2 md:p-6 flex flex-col items-center justify-center  border rounded-lg shadow-sm font-popppins ">
+    <div className=" p-2 md:p-6 flex flex-col items-center justify-center  border rounded-lg shadow-sm font-popppins  ">
       <Image
         src={productItem?.images.trim() || fallback}
         alt="product"
