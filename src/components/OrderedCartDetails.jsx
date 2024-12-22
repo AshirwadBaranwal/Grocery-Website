@@ -11,7 +11,7 @@ const OrderedCartDetails = ({ cart }) => {
             className="flex items-start bg-white p-4 rounded-lg shadow-md relative pt-8 mb-5 "
           >
             <Image
-              src={item?.product?.images}
+              src={item?.product?.images.trim()}
               alt="img"
               width={100}
               height={10}
