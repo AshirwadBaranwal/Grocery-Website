@@ -13,17 +13,27 @@ import {
 } from "@/components/ui/dialog";
 import ProductItemDetails from "@/components/ProductItemDetails";
 
-
 const ProductItem = ({ productItem }) => {
   return (
     <div className=" p-2 md:p-6 flex flex-col items-center justify-center  border rounded-lg shadow-sm font-popppins  ">
-      <Image
-        src={productItem?.images.trim()}
-        alt="product"
-        height={200}
-        width={500}
-        className=" h-[100px] w-[100px] md:h-[200px] md:w-[200px]"
-      />
+      {productItem?.images ? (
+        <Image
+          src={productItem?.images.trim()}
+          alt="product"
+          height={200}
+          width={500}
+          className=" h-[100px] w-[100px] md:h-[200px] md:w-[200px]"
+        />
+      ) : (
+        <Image
+          src="https://www.freeiconspng.com/thumbs/no-image-icon/no-image-icon-6.png"
+          alt="product"
+          height={200}
+          width={500}
+          className=" h-[100px] w-[100px] md:h-[200px] md:w-[200px]"
+        />
+      )}
+
       <h2 className="font-poppins text-xs md:text-md text-center">
         {productItem.name}
       </h2>

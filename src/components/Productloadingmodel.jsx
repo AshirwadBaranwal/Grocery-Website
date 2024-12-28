@@ -8,7 +8,7 @@ const ProductLoadingmodel = () => {
         return (
           <div
             key={index}
-            className="h-[250px] w-full bg-gray-300 animate-pulse rounded-lg mt-5"
+            className="h-[250px] w-full bg-gray-100 animate-pulse rounded-lg mt-5"
           ></div>
         );
       })}

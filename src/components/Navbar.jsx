@@ -5,7 +5,6 @@ import { Button } from "./ui/button";
 import { ShoppingCart } from "lucide-react";
 import Link from "next/link";
 import { useGrocery } from "@/context/GroceryContext";
-import { LoginLink, LogoutLink } from "@kinde-oss/kinde-auth-nextjs/components";
 import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
 import SearchBar from "./SearchBar";
 import Dropdown from "@/components/Dropdown.jsx";

@@ -34,13 +34,24 @@ const Cart = () => {
                 >
                   <X size={16} />
                 </span>
-                <Image
-                  src={item?.product?.images.trim()}
-                  alt="img"
-                  width={100}
-                  height={10}
-                  className="w-20 h-20 rounded-lg object-cover"
-                />
+                {item?.product?.images ? (
+                  <Image
+                    src={item?.product?.images.trim()}
+                    alt="img"
+                    width={100}
+                    height={10}
+                    className="w-20 h-20 rounded-lg object-cover"
+                  />
+                ) : (
+                  <Image
+                    src="https://www.freeiconspng.com/thumbs/no-image-icon/no-image-icon-6.png"
+                    alt="img"
+                    width={100}
+                    height={10}
+                    className="w-20 h-20 rounded-lg object-cover"
+                  />
+                )}
+
                 <div className="ml-4 flex-1">
                   <h2 className="text-lg font-medium text-gray-900 leading-tight">
                     {item?.product?.name}

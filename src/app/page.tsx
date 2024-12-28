@@ -16,6 +16,9 @@ export default function Home() {
       <div className="p-3 md:px-16  md:pt-16">
      <HomeCrousel/>
      <CategoryList/>
+     <h2 className="my-3 text-2xl font-concertOne text-primary  md:font-bold">
+        Popular Products
+      </h2>
      <PopularProducts/>
     </div>
     <Footer/>

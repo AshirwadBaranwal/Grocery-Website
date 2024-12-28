@@ -12,13 +12,24 @@ const ProductItemDetails = ({ product }) => {
   const [quantity, setQuantity] = useState(1);
   return (
     <div className="flex flex-col items-center md:grid md:grid-cols-2 bg-white text-black p-7">
-      <Image
-        src={product?.images.trim()}
-        alt={product.name}
-        height={250}
-        width={250}
-        className="object-contain rounded-lg bg-white"
-      />
+      {product?.images ? (
+        <Image
+          src={product?.images.trim()}
+          alt={product.name}
+          height={250}
+          width={250}
+          className="object-contain rounded-lg bg-white"
+        />
+      ) : (
+        <Image
+          src="https://www.freeiconspng.com/thumbs/no-image-icon/no-image-icon-6.png"
+          alt={product.name}
+          height={250}
+          width={250}
+          className="object-contain rounded-lg bg-white"
+        />
+      )}
+
       <div className="flex flex-col gap-2 items-center">
         <h2 className="text-2xl font-bold">{product.name}</h2>
         <h2 className="text-md font-bold">{product.desc}</h2>

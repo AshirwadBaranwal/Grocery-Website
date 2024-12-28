@@ -26,9 +26,7 @@ const PopularProducts = () => {
 
   return (
     <div>
-      <h2 className="my-3 text-2xl font-concertOne text-primary  md:font-bold">
-        Popular Products
-      </h2>
+
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-5 ">
         {popularProducts?.map((items, index) => {
           return index < 7 && <ProductItem key={index} productItem={items} />;
