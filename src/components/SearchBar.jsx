@@ -1,5 +1,5 @@
 "use client";
-import { Search } from "lucide-react";
+import { Search, SearchIcon } from "lucide-react";
 import React from "react";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
@@ -46,14 +46,15 @@ const SearchBar = ({ className }) => {
 
   return (
     <div
-      className={` ${className} relative flex items-center gap-2   rounded-sm shadow-md cursor-pointer `}
+      className={` ${className} relative flex items-center gap-1 cursor-pointer border-gray-300 bg-gray-100 rounded-md px-2 `}
     >
+      <SearchIcon className="w-4 h-4" />
       <input
         type="text"
         value={query}
         onChange={handleChange}
         placeholder="Search for products..."
-        className="w-full border border-gray-300 rounded-md p-2"
+        className="w-full   bg-gray-100 rounded-md p-2 outline-none border-0"
       />
       {suggestions.length > 0 && (
         <ul className="absolute top-full left-0 text-sm w-full font-poppins bg-white border border-gray-300 rounded-md mt-1 shadow-lg z-40 ">

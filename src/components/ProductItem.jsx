@@ -3,17 +3,35 @@ import React from "react";
 import Image from "next/image";
 import { Button } from "./ui/button";
 import Formatter from "@/lib/utils/Formatter.jsx";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import ProductItemDetails from "@/components/ProductItemDetails";
+import { Minus, Plus } from "lucide-react";
+import { useGrocery } from "@/context/GroceryContext";
 
 const ProductItem = ({ productItem }) => {
+  const { cart, addToCart, updateCartItem, deleteCartItem, user } =
+    useGrocery();
+
+  // Find if item exists in cart
+  const cartItem = cart.find(
+    (item) => String(item.product.id) === String(productItem.id)
+  );
+
+  const handleQuantityChange = (newQuantity) => {
+    if (newQuantity === 0) {
+      // Remove from cart if quantity is 0
+      deleteCartItem(cartItem.id);
+    } else if (cartItem) {
+      // Update quantity if item exists
+      updateCartItem(cartItem.id, { quantity: newQuantity });
+    } else {
+      // Add to cart if item doesn't exist
+      addToCart({
+        product: productItem.id,
+        user: user.email,
+        quantity: newQuantity,
+      });
+    }
+  };
+
   return (
     <div className=" p-2 md:p-6 flex flex-col items-center justify-center  border rounded-lg shadow-sm font-popppins  ">
       {productItem?.images ? (
@@ -22,7 +40,7 @@ const ProductItem = ({ productItem }) => {
           alt="product"
           height={200}
           width={500}
-          className=" h-[100px] w-[100px] md:h-[200px] md:w-[200px]"
+          className=" h-[100px] w-[100px] md:h-[150px] md:w-[150px]"
         />
       ) : (
         <Image
@@ -30,44 +48,52 @@ const ProductItem = ({ productItem }) => {
           alt="product"
           height={200}
           width={500}
-          className=" h-[100px] w-[100px] md:h-[200px] md:w-[200px]"
+          className=" h-[100px] w-[100px] md:h-[170px] md:w-[150px]"
         />
       )}
-
-      <h2 className="font-poppins text-xs md:text-md text-center">
-        {productItem.name}
-      </h2>
-      <span className="flex gap-1 items-center font-poppins text-xs md:text-md">
-        MRP:
-        <h2 className="line-through font-poppins text-xs md:text-md">
-          ₹{Formatter.formatNumber(productItem.mrp)}
+      <div className="flex flex-col items-center gap-2">
+        <h2 className="font-poppins text-xs md:text-md text-center font-bold text-gray-700">
+          {productItem.name}
         </h2>
-      </span>
-      {productItem.sellingPrice && (
-        <h2 className="font-poppins text-xs md:text-md">
-          {" "}
-          Rate: ₹{Formatter.formatNumber(productItem.sellingPrice)}
-        </h2>
-      )}
+        <span className="flex gap-1 items-center font-poppins text-xs md:text-md">
+          MRP:
+          <h2 className="line-through font-poppins text-xs md:text-md">
+            ₹{Formatter.formatNumber(productItem.mrp)}
+          </h2>
+        </span>
+        {productItem.sellingPrice && (
+          <h2 className="font-poppins font-semibold  text-xs md:text-md">
+            {" "}
+            Rate: ₹{Formatter.formatNumber(productItem.sellingPrice)}
+          </h2>
+        )}
+      </div>
 
-      <Dialog>
-        <DialogTrigger asChild>
-          <Button
-            variant="outline"
-            className="mt-4 font-poppins  text-xs md:text-md"
+      {!cartItem ? (
+        <Button
+          onClick={() => handleQuantityChange(1)}
+          variant="outline"
+          className="mt-4 font-poppins text-xs md:text-md"
+        >
+          Add to cart
+        </Button>
+      ) : (
+        <div className="flex gap-4 items-center mt-4 bg-primary rounded-md">
+          <button
+            onClick={() => handleQuantityChange(cartItem.quantity - 1)}
+            className="w-8 h-8 flex items-center justify-center bg-primary text-white rounded-full"
           >
-            Add to cart
-          </Button>
-        </DialogTrigger>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Add your item to cart -</DialogTitle>
-            <DialogDescription asChild>
-              <ProductItemDetails product={productItem} />
-            </DialogDescription>
-          </DialogHeader>
-        </DialogContent>
-      </Dialog>
+            <Minus size={16} />
+          </button>
+          <span className="font-medium text-white">{cartItem.quantity}</span>
+          <button
+            onClick={() => handleQuantityChange(cartItem.quantity + 1)}
+            className="w-8 h-8 flex items-center justify-center bg-primary text-white rounded-full"
+          >
+            <Plus size={16} />
+          </button>
+        </div>
+      )}
     </div>
   );
 };

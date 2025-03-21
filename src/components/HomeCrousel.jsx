@@ -1,4 +1,4 @@
-'use client'
+"use client";
 import React from "react";
 import {
   Carousel,
@@ -26,7 +26,7 @@ const SliderList = [
 
 const HomeCrousel = () => {
   return (
-    <div className="  md:py-10">
+    <div className="  md:py-5">
       <Carousel className="">
         <CarouselContent>
           {SliderList.map((items, index) => {
@@ -35,9 +35,9 @@ const HomeCrousel = () => {
                 <Image
                   src={items.image}
                   alt="banner"
-                  height={400}
+                  height={300}
                   width={1500}
-                  className="w-full h-[200px] md:h-[400px]  object-cover rounded-2xl"
+                  className="w-full h-[200px] md:h-[300px]  object-cover rounded-2xl"
                 />
               </CarouselItem>
             );

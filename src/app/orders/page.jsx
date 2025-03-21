@@ -1,28 +1,75 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import { useGrocery } from "@/context/GroceryContext"; // Assuming your context is here
 import Formatter from "../../lib/utils/Formatter.jsx";
 import OrderedCartDetailsPop from "../../components/OrderedCartDetailsPop.jsx";
 import BackBar from "../../components/BackBar.jsx";
+import Image from "next/image";
+import InvoicePopup from "../../components/InvoicePopup.jsx";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+  DialogClose,
+} from "@/components/ui/dialog";
 
 const MyOrders = () => {
-  const { orders, user } = useGrocery();
+  const { orders, user, cancelOrder } = useGrocery();
+  const [activeTab, setActiveTab] = useState("All");
+  const [cancellingOrder, setCancellingOrder] = useState(null);
+
+  // Filter and sort orders based on active tab
+  const filteredOrders = orders
+    ?.filter((order) => {
+      if (activeTab === "All") return true;
+      return order.status === activeTab;
+    })
+    .sort((a, b) => {
+      // Sort by created_at in descending order (newest first)
+      return new Date(b.created_at) - new Date(a.created_at);
+    });
+
   // Calculate total price for an order
   const calculateTotal = (cartItems) => {
-    // Parse the JSON string if it hasn't already been parsed
-    const parsedItems =
-      typeof cartItems === "string" ? JSON.parse(cartItems) : cartItems;
+    try {
+      // Parse the JSON string if it's a string, otherwise use the object directly
+      const parsedItems =
+        typeof cartItems === "string" ? JSON.parse(cartItems) : cartItems;
 
-    // Ensure it's an array
-    if (!Array.isArray(parsedItems)) return 0;
+      // Ensure it's an array
+      if (!Array.isArray(parsedItems)) return 0;
 
-    // Calculate the total
-    return parsedItems.reduce((total, item) => {
-      const quantity = item?.quantity || 0;
-      const sellingPrice = item?.product?.sellingPrice || 0;
-      return total + quantity * sellingPrice;
-    }, 0);
+      // Calculate the total
+      return parsedItems.reduce((total, item) => {
+        const quantity = item?.quantity || 0;
+        const sellingPrice = item?.product?.sellingPrice || 0;
+        return total + quantity * sellingPrice;
+      }, 0);
+    } catch (error) {
+      console.error("Error calculating total:", error);
+      return 0;
+    }
   };
+
+  // Handle cancel order
+  const handleCancelOrder = async (order) => {
+    if (order.status === "Cancelled") {
+      return;
+    }
+    const success = await cancelOrder(order.id);
+    if (success) {
+      setCancellingOrder(null);
+    }
+  };
+
+  const tabs = [
+    { id: "All", label: "All Orders" },
+    { id: "Pending", label: "Pending" },
+    { id: "Delivered", label: "Delivered" },
+    { id: "Cancelled", label: "Cancelled" },
+  ];
 
   if (!user) {
     return (
@@ -38,55 +85,177 @@ const MyOrders = () => {
     <>
       <BackBar path="/" />
       <div className="p-4 flex flex-col lg:flex-row gap-5 min-h-screen mt-16">
-        {/* Profile Information */}
-        <div className="  h-fit p-4 rounded-lg shadow-md mb-1 w-full lg:w-1/2 lg:sticky lg:top-20 bg-green-50 ">
-          <h3 className="text-lg font-semibold  mb-2">
-            Name: {user.given_name} {user.family_name}
-          </h3>
-          <p className="">Email: {user.email}</p>
-          {/* <p className="">Address: Sariswa Bazar, Bettiah</p>
-          <p className="">Phone: 8252261062</p> */}
+        {/* Side Navigation Tabs */}
+        <div className="lg:w-1/4 space-y-2 relative ">
+          <div className="bg-white rounded-lg shadow-md p-4 sticky top-20">
+            <h2 className="text-lg font-semibold mb-4">Order Status</h2>
+            <div className="flex flex-col space-y-2">
+              {tabs.map((tab) => (
+                <button
+                  key={tab.id}
+                  onClick={() => setActiveTab(tab.id)}
+                  className={`px-4 py-2 rounded-lg text-left transition-colors ${
+                    activeTab === tab.id
+                      ? "bg-yellow-400 text-black font-medium"
+                      : "hover:bg-gray-100"
+                  }`}
+                >
+                  {tab.label}
+                  <span className="ml-2 text-sm text-gray-500">
+                    (
+                    {orders?.filter((order) =>
+                      tab.id === "All" ? true : order.status === tab.id
+                    ).length || 0}
+                    )
+                  </span>
+                </button>
+              ))}
+            </div>
+          </div>
         </div>
 
         {/* Orders List */}
-        <div className="space-y-4 w-full lg:w-1/2 ">
-          {orders &&
-            orders.map((order) => (
+        <div className="lg:w-3/4 space-y-4">
+          {filteredOrders && filteredOrders.length > 0 ? (
+            filteredOrders.map((order) => (
               <div
                 key={order.id}
-                className="text-sm bg-white border  p-4 rounded-lg shadow-md relative"
+                className="bg-white rounded-lg shadow-md overflow-hidden"
               >
-                <span
-                  className={` top-10 lg:top-5 right-2 px-3 py-1 absolute text-xs font-medium rounded-full ${
-                    order.status === "pending"
-                      ? "bg-yellow-100 text-yellow-700"
-                      : "bg-green-100 text-green-700"
-                  }`}
-                >
-                  {order.status}
-                </span>
-                <p className="text-gray-700 mb-1">
-                  <span className="font-semibold">Order ID:</span>{" "}
-                  {order.orderId}
-                </p>
-                <p className="text-gray-700 mb-1">
-                  <span className="font-semibold">Order Date:</span>{" "}
-                  {Formatter.formatDate(order?.created_at)}
-                </p>
-                <p className="text-gray-700 mb-4">
-                  <span className="font-semibold">Total Amount:</span> ₹ ₹
-                  {calculateTotal(order.cartItems)}
-                </p>
-                <div className=" w-full grid grid-cols-2 gap-4 text-sm ">
-                  <div className="px-4 py-2 w-full border-r-2 border-gray-400  text-black text-sm font-medium  flex justify-center items-center ">
-                    <OrderedCartDetailsPop cart={order.cartItems} />
+                {/* Order Header */}
+                <div className="bg-yellow-400 p-4">
+                  <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                    <div>
+                      <p className="text-sm font-medium">Order ID</p>
+                      <p className="text-sm">#{order.orderId}</p>
+                    </div>
+                    <div>
+                      <p className="text-sm font-medium">Total Payment</p>
+                      <p className="text-sm">
+                        ₹{calculateTotal(order.cartItems)}
+                      </p>
+                    </div>
+                    <div>
+                      <p className="text-sm font-medium">Payment Method</p>
+                      <p className="text-sm">
+                        {order.paymentMethod || "Paypal"}
+                      </p>
+                    </div>
+                    <div>
+                      <p className="text-sm font-medium">Order Date</p>
+                      <p className="text-sm">
+                        {Formatter.formatDate(order?.created_at)}
+                      </p>
+                    </div>
                   </div>
-                  <div className="  px-4 py-2 w-full  text-black text-sm font-medium flex justify-center items-center  ">
-                    Cancel Order
+                </div>
+
+                {/* Order Items */}
+                <div className="p-4 space-y-4">
+                  {order.cartItems &&
+                    (typeof order.cartItems === "string"
+                      ? JSON.parse(order.cartItems)
+                      : order.cartItems
+                    ).map((item, index) => (
+                      <div key={index} className="flex items-center gap-3 py-2">
+                        <div className="w-12 h-12 relative">
+                          {item?.product?.images ? (
+                            <Image
+                              src={item?.product?.images.trim()}
+                              alt={item?.product?.name}
+                              width={48}
+                              height={48}
+                              className="object-contain rounded-lg"
+                            />
+                          ) : (
+                            <Image
+                              src="https://www.freeiconspng.com/thumbs/no-image-icon/no-image-icon-6.png"
+                              alt="No image"
+                              width={48}
+                              height={48}
+                              className="object-contain rounded-lg"
+                            />
+                          )}
+                        </div>
+                        <div className="flex-1">
+                          <h3 className="text-base font-medium">
+                            {item?.product?.name}
+                          </h3>
+                          <p className="text-sm text-gray-600">
+                            {item?.product?.itemQuantityType} | {item?.quantity}{" "}
+                            Qty.
+                          </p>
+                        </div>
+                      </div>
+                    ))}
+                </div>
+
+                {/* Order Status and Actions */}
+                <div className="p-4 border-t">
+                  <div className="flex items-center gap-2">
+                    <span
+                      className={`px-3 py-1 text-xs font-medium rounded-full ${
+                        order.status === "Pending"
+                          ? "bg-yellow-100 text-yellow-700"
+                          : order.status === "Cancelled"
+                          ? "bg-red-100 text-red-700"
+                          : "bg-green-100 text-green-700"
+                      }`}
+                    >
+                      {order.status}
+                    </span>
+                    <p className="text-sm">
+                      Your Order has been {order.status}
+                    </p>
+                  </div>
+                  <div className="flex flex-wrap gap-3 mt-4">
+                    {order.status !== "Cancelled" && (
+                      <button className="px-6 py-2 bg-green-600 text-white rounded-lg text-sm">
+                        Track Order
+                      </button>
+                    )}
+                    <InvoicePopup order={order} user={user} />
+                    {order.status === "Pending" && (
+                      <Dialog>
+                        <DialogTrigger className="px-6 py-2 text-red-500 ml-auto text-sm hover:bg-red-50 rounded-lg transition-colors">
+                          Cancel Order
+                        </DialogTrigger>
+                        <DialogContent className="sm:max-w-md">
+                          <DialogHeader>
+                            <DialogTitle className="text-xl font-semibold">
+                              Cancel Order
+                            </DialogTitle>
+                          </DialogHeader>
+                          <div className="space-y-4 py-4">
+                            <p>Are you sure you want to cancel this order?</p>
+                            <p className="text-sm text-gray-500">
+                              This action cannot be undone. The order status
+                              will be changed to cancelled.
+                            </p>
+                          </div>
+                          <div className="flex justify-end gap-3">
+                            <DialogClose className="px-4 py-2 border rounded-lg text-sm">
+                              No, keep it
+                            </DialogClose>
+                            <button
+                              onClick={() => handleCancelOrder(order)}
+                              className="px-4 py-2 bg-red-600 text-white rounded-lg text-sm hover:bg-red-700"
+                            >
+                              Yes, cancel order
+                            </button>
+                          </div>
+                        </DialogContent>
+                      </Dialog>
+                    )}
                   </div>
                 </div>
               </div>
-            ))}
+            ))
+          ) : (
+            <div className="text-center py-8">
+              <p className="text-gray-500">No orders found in this category</p>
+            </div>
+          )}
         </div>
       </div>
     </>

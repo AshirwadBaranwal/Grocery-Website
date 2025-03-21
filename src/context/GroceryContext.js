@@ -111,7 +111,9 @@ export const GroceryProvider = ({ children }) => {
     const { data, error } = await supabase
       .from("Orders")
       .select("*")
-      .eq("user", email); // Filter by user email
+      .eq("user", email)
+      .order("created_at", { ascending: false });
+
     if (error) {
       console.error("Error fetching orders:", error);
     } else {
@@ -119,7 +121,7 @@ export const GroceryProvider = ({ children }) => {
         ...order,
         cartItems: JSON.parse(order.cartItems),
       }));
-      setOrders(parsedOrders); // Update state with parsed orders
+      setOrders(parsedOrders); // Orders will already be sorted
     }
   };
 
@@ -175,6 +177,37 @@ export const GroceryProvider = ({ children }) => {
     }
   };
 
+  // Cancel order function
+  const cancelOrder = async (orderId) => {
+    try {
+      const { data, error } = await supabase
+        .from("Orders")
+        .update({ status: "Cancelled" })
+        .eq("id", orderId)
+        .select();
+
+      if (error) {
+        console.error("Error cancelling order:", error);
+        toast.error("Failed to cancel order");
+        return false;
+      }
+
+      // Update the orders state with the cancelled order
+      setOrders((prevOrders) =>
+        prevOrders.map((order) =>
+          order.id === orderId ? { ...order, status: "Cancelled" } : order
+        )
+      );
+
+      toast.success("Order cancelled successfully");
+      return true;
+    } catch (error) {
+      console.error("Unexpected error:", error);
+      toast.error("An unexpected error occurred");
+      return false;
+    }
+  };
+
   useEffect(() => {
     if (user) {
       fetchProducts();
@@ -194,6 +227,7 @@ export const GroceryProvider = ({ children }) => {
         user,
         addToOrder,
         orders,
+        cancelOrder,
       }}
     >
       {children}

@@ -82,8 +82,9 @@ const CategoryList = () => {
                     alt="icon"
                     height={500}
                     width={500}
+                    loading="lazy"
                   />
-                  <p className="font-poppins text-xs font-medium text-center">
+                  <p className="font-poppins text-sm font-semibold text-gray-600 text-center">
                     {items.title}
                   </p>
                 </div>

@@ -7,7 +7,6 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import Image from "next/image";
 import OrderedCartDetails from "./OrderedCartDetails";
 
 const OrderedCartDetailsPop = ({ cart }) => {

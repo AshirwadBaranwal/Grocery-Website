@@ -26,10 +26,9 @@ const PopularProducts = () => {
 
   return (
     <div>
-
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-5 ">
+      <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-3 md:gap-5 ">
         {popularProducts?.map((items, index) => {
-          return index < 7 && <ProductItem key={index} productItem={items} />;
+          return index < 9 && <ProductItem key={index} productItem={items} />;
         })}
         <Link
           href="/allproducts"

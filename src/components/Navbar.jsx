@@ -8,10 +8,18 @@ import { useGrocery } from "@/context/GroceryContext";
 import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
 import SearchBar from "./SearchBar";
 import Dropdown from "@/components/Dropdown.jsx";
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "./ui/sheet";
+import CartSheet from "./CartSheet";
 
 const Navbar = () => {
   const { cart } = useGrocery();
-  const { user, getUser } = useKindeBrowserClient();
+  const { user } = useKindeBrowserClient();
   return (
     <>
       <div className="flex items-center w-full fixed top-0  z-50 bg-white justify-between pr-5 md:px-10 py-3 md:py-3 border border-gray-300">
@@ -32,14 +40,22 @@ const Navbar = () => {
         </div>
 
         <div className="flex items-center gap-5 md:gap-10">
-          <Link href="/cart">
-            <span className="cursor-pointer relative">
-              <ShoppingCart />
-              <span className="h-5  w-5 flex justify-center items-center bg-[#e80000] font-bold text-white absolute text-[10px]   rounded-full  -top-2 -right-2">
-                {cart?.length}
+          <Sheet>
+            <SheetTrigger asChild>
+              <span className="cursor-pointer relative">
+                <ShoppingCart />
+                <span className="h-5  w-5 flex justify-center items-center bg-[#e80000] font-bold text-white absolute text-[10px]   rounded-full  -top-2 -right-2">
+                  {cart?.length}
+                </span>
               </span>
-            </span>
-          </Link>
+            </SheetTrigger>
+            <SheetContent className="w-full sm:max-w-lg">
+              <SheetHeader>
+                <SheetTitle>My Cart</SheetTitle>
+              </SheetHeader>
+              <CartSheet />
+            </SheetContent>
+          </Sheet>
           {/* {!user ? (
             <LoginLink>
               <Button>Login</Button>

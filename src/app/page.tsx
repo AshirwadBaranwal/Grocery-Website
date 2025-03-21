@@ -5,6 +5,7 @@ import SearchBar from '@/components/SearchBar.jsx'
 import PopularProducts from '@/components/PopularProducts.jsx'
 import Footer from '@/components/Footer.jsx'
 import Navbar from "@/components/Navbar";
+import SuccessModal from '@/components/SuccessModal'
 
 
 export default function Home() {
