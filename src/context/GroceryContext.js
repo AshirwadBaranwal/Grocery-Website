@@ -180,7 +180,7 @@ export const GroceryProvider = ({ children }) => {
   // Cancel order function
   const cancelOrder = async (orderId) => {
     try {
-      const { data, error } = await supabase
+      const { error } = await supabase
         .from("Orders")
         .update({ status: "Cancelled" })
         .eq("id", orderId)
