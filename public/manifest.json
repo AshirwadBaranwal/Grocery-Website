@@ -1,0 +1,37 @@
+{
+  "name": "Patna Grocery",
+  "short_name": "Grocery",
+  "description": "Your one-stop grocery shopping app",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#16a34a",
+  "icons": [
+    {
+      "src": "/icons/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/icons/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/screenshots/desktop.png",
+      "sizes": "1920x1080",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "Desktop view of Grocery Website"
+    },
+    {
+      "src": "/screenshots/mobile.png",
+      "sizes": "320x661",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Mobile view of Grocery Website"
+    }
+  ]
+} 

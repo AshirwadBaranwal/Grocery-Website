@@ -84,7 +84,7 @@ const CategoryList = () => {
                     width={500}
                     loading="lazy"
                   />
-                  <p className="font-poppins text-sm font-semibold text-gray-600 text-center">
+                  <p className="font-poppins text-xs md:text-sm font-semibold text-gray-600 text-center">
                     {items.title}
                   </p>
                 </div>
