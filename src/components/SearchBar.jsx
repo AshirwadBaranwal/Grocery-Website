@@ -1,6 +1,6 @@
 "use client";
-import { Search, SearchIcon } from "lucide-react";
 import React from "react";
+import {SearchIcon} from "lucide-react";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useGrocery } from "@/context/GroceryContext";

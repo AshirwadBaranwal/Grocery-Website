@@ -2,7 +2,8 @@
 import React, { useState } from "react";
 import { useGrocery } from "@/context/GroceryContext"; // Assuming your context is here
 import Formatter from "../../lib/utils/Formatter.jsx";
-import OrderedCartDetailsPop from "../../components/OrderedCartDetailsPop.jsx";
+import useIsMobile from "@/hooks/use-mobile";
+
 import BackBar from "../../components/BackBar.jsx";
 import Image from "next/image";
 import InvoicePopup from "../../components/InvoicePopup.jsx";
@@ -14,11 +15,14 @@ import {
   DialogTrigger,
   DialogClose,
 } from "@/components/ui/dialog";
+import MobileTabHead from "@/components/MobileTabHead";
+import BottomNav from "@/components/BottomNav";
 
 const MyOrders = () => {
   const { orders, user, cancelOrder } = useGrocery();
   const [activeTab, setActiveTab] = useState("All");
   const [cancellingOrder, setCancellingOrder] = useState(null);
+  const isMobile = useIsMobile();
 
   // Filter and sort orders based on active tab
   const filteredOrders = orders
@@ -83,8 +87,9 @@ const MyOrders = () => {
 
   return (
     <>
-      <BackBar path="/" />
-      <div className="p-4 flex flex-col lg:flex-row gap-5 min-h-screen mt-16">
+      {!isMobile && <BackBar path="/" />}
+      {isMobile && <MobileTabHead TabHead="My Orders" />}
+      <div className="p-4 flex flex-col lg:flex-row gap-5 min-h-screen mt-16 mb-16">
         {/* Side Navigation Tabs */}
         <div className="lg:w-1/4 space-y-2 relative ">
           <div className="bg-white rounded-lg shadow-md p-4 sticky top-20">
@@ -258,6 +263,7 @@ const MyOrders = () => {
           )}
         </div>
       </div>
+      {isMobile && <BottomNav />}
     </>
   );
 };

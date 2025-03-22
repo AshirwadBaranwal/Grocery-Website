@@ -1,6 +1,12 @@
 import React from "react";
-import { EllipsisVertical } from "lucide-react";
-import { LoginLink, LogoutLink } from "@kinde-oss/kinde-auth-nextjs/components";
+import {
+  CircleUserRound,
+  Container,
+  EllipsisVertical,
+  LogOut,
+  MapPinHouse,
+} from "lucide-react";
+import { LogoutLink } from "@kinde-oss/kinde-auth-nextjs/components";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -13,23 +19,29 @@ import Link from "next/link";
 
 const Dropdown = () => {
   return (
-    <div>
-      <DropdownMenu className="right-5">
+    <div className="hidden md:block">
+      <DropdownMenu className="right-5 ">
         <DropdownMenuTrigger className="bg-green-300 outline-none flex size-8 items-center justify-center rounded-full">
           <EllipsisVertical size={16} />
         </DropdownMenuTrigger>
         <DropdownMenuContent>
-          <DropdownMenuLabel>My Account</DropdownMenuLabel>
+          <DropdownMenuLabel className="text-md">My Account</DropdownMenuLabel>
           <DropdownMenuSeparator />
-          <DropdownMenuItem>Profile</DropdownMenuItem>
-          <DropdownMenuItem>
+          <DropdownMenuItem className="text-md w-[200px] mt-3">
+            <CircleUserRound size={10} />
+            <Link href="/profile"> My Profile</Link>
+          </DropdownMenuItem>
+          <DropdownMenuItem className="text-md w-[200px] mt-3">
+            <Container />
             <Link href="/orders">My Orders</Link>
           </DropdownMenuItem>
-          <DropdownMenuItem>
+          <DropdownMenuItem className="text-md w-[200px] mt-3">
+            <MapPinHouse />
             <Link href="/address">Manage Address</Link>
           </DropdownMenuItem>
-          <DropdownMenuItem>
-            <LogoutLink>
+          <DropdownMenuItem className="text-md w-[200px] mt-3">
+            <LogoutLink className="flex items-center gap-2">
+              <LogOut className="text-red-500 size-4" />
               <p className="text-red-500">Logout</p>
             </LogoutLink>
           </DropdownMenuItem>

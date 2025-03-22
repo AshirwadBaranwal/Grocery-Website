@@ -28,7 +28,7 @@ export const metadata: Metadata = {
   title: "Grocery Website",
   description: "Your one-stop grocery shopping app",
   manifest: "/manifest.json",
-  themeColor: "#000000",
+  themeColor: "#16a34a",
   appleWebApp: {
     capable: true,
     statusBarStyle: "default",

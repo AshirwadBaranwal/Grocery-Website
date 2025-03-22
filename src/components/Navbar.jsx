@@ -8,6 +8,7 @@ import { useGrocery } from "@/context/GroceryContext";
 import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
 import SearchBar from "./SearchBar";
 import Dropdown from "@/components/Dropdown.jsx";
+import BottomNav from "./BottomNav";
 import {
   Sheet,
   SheetContent,
@@ -39,7 +40,8 @@ const Navbar = () => {
           <SearchBar className=" hidden md:flex ml-20 " />
         </div>
 
-        <div className="flex items-center gap-5 md:gap-10">
+        <div className="flex items-center gap-5 md:gap-10 md:mr-5">
+          <Dropdown />
           <Sheet>
             <SheetTrigger asChild>
               <span className="cursor-pointer relative">
@@ -65,9 +67,9 @@ const Navbar = () => {
               <Button>Logout</Button>
             </LogoutLink>
           )} */}
-          <Dropdown />
         </div>
       </div>
+      <BottomNav />
     </>
   );
 };

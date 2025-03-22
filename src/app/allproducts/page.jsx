@@ -2,16 +2,15 @@
 import React from "react";
 import { useGrocery } from "@/context/GroceryContext";
 import ProductItem from "@/components/ProductItem.jsx";
-import BackBar from "@/components/BackBar.jsx";
 import SearchBar from "@/components/SearchBar.jsx";
-import Navbar from "@/components/Navbar.jsx"
+import Navbar from "@/components/Navbar.jsx";
 const page = () => {
   const { groceryProducts } = useGrocery();
   return (
     <>
       <Navbar />
       <div className="mt-16  md:mt-20 md:m-10 m-5">
-        <SearchBar />
+        <SearchBar className='top-3' />
         <h2 className="my-3 text-2xl font-concertOne text-primary  md:font-bold">
           All Products
         </h2>

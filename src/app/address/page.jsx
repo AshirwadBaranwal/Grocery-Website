@@ -4,7 +4,10 @@ import { useGrocery } from "@/context/GroceryContext";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
+import useIsMobile from "@/hooks/use-mobile";
 import BackBar from "@/components/BackBar";
+import MobileTabHead from "@/components/MobileTabHead";
+import BottomNav from "@/components/BottomNav";
 import {
   Form,
   FormControl,
@@ -35,6 +38,7 @@ const AddressPage = () => {
   const { user } = useGrocery();
   const [addresses, setAddresses] = useState([]);
   const [loading, setLoading] = useState(false);
+  const isMobile = useIsMobile();
 
   const form = useForm({
     resolver: zodResolver(addressSchema),
@@ -165,9 +169,10 @@ const AddressPage = () => {
 
   return (
     <>
-      <BackBar path="/" />
-      <div className="container mx-auto p-4 mt-16">
-        <h1 className="text-2xl font-bold mb-6">Manage Addresses</h1>
+      {!isMobile && <BackBar path="/" />}
+      {isMobile && <MobileTabHead TabHead="Manage Addresses" />}
+      <div className="container mx-auto p-4 mt-16 mb-16">
+        {/* <h1 className="text-2xl font-bold mb-6">Manage Addresses</h1> */}
 
         {/* Address Form */}
         <div className="bg-white rounded-lg shadow-md p-6 mb-6">
@@ -359,6 +364,7 @@ const AddressPage = () => {
           </div>
         </div>
       </div>
+      {isMobile && <BottomNav />}
     </>
   );
 };

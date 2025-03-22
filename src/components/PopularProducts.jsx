@@ -7,6 +7,7 @@ import Link from "next/link";
 import { useGrocery } from "@/context/GroceryContext";
 
 const PopularProducts = () => {
+  
   const [popularProducts, setPopularProducts] = useState([]);
   const { groceryProducts } = useGrocery();
 
