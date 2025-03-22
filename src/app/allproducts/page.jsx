@@ -10,7 +10,7 @@ const page = () => {
     <>
       <Navbar />
       <div className="mt-16  md:mt-20 md:m-10 m-5">
-        <SearchBar className='top-3' />
+        <SearchBar className="top-3" />
         <h2 className="my-3 text-2xl font-concertOne text-primary  md:font-bold">
           All Products
         </h2>
