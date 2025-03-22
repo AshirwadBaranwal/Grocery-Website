@@ -10,7 +10,7 @@ const BottomNav = () => {
 
   const navItems = [
     { href: "/", icon: Home, label: "Home" },
-    { href: "/categories?category=Vegetables", icon: Grid, label: "Categories" },
+    { href: "/categories", icon: Grid, label: "Categories" },
     { href: "/orders", icon: ShoppingCart, label: "Orders" },
     { href: "/address", icon: MapPin, label: "Address" },
     { href: "/profile", icon: User, label: "Profile" },

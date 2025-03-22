@@ -3,15 +3,12 @@ import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import supabase from "@/lib/SupbaseConfig";
 import Image from "next/image";
-import { useSearchParams } from "next/navigation";
 import ProductItem from "@/components/ProductItem.jsx";
 
 const CategoriesContent = () => {
   const [categoryItems, setCategoryItems] = useState([]);
   const [products, setProducts] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState(null);
-  const searchParams = useSearchParams();
-  const categoryName = searchParams.get("category");
 
   const getAllCategories = async () => {
     try {
@@ -20,6 +17,11 @@ const CategoriesContent = () => {
         .select("*");
       if (Categories) {
         setCategoryItems(Categories);
+        // Set the first category as selected by default
+        if (Categories.length > 0) {
+          setSelectedCategory(Categories[0].title);
+          getProductsByCategory(Categories[0].title);
+        }
       } else {
         console.log(error);
       }
@@ -50,11 +52,9 @@ const CategoriesContent = () => {
     getAllCategories();
   }, []);
 
-  useEffect(() => {
-    if (categoryName) {
-      getProductsByCategory(categoryName);
-    }
-  }, [categoryName]);
+  const handleCategorySelect = (categoryTitle) => {
+    getProductsByCategory(categoryTitle);
+  };
 
   return (
     <div className="flex bg-gray-100 pt-16">
@@ -63,20 +63,18 @@ const CategoriesContent = () => {
         {categoryItems.length > 0 ? (
           <div className="pb-20 md:pb-0 h-[calc(100vh-64px)] overflow-y-auto">
             {categoryItems.map((category, index) => (
-              <Link
-                href={`/categories?category=${encodeURIComponent(
-                  category.title
-                )}`}
+              <div
                 key={index}
-                className={`block ${
+                onClick={() => handleCategorySelect(category.title)}
+                className={`block cursor-pointer ${
                   selectedCategory === category.title
                     ? "bg-green-50 border-l-4 border-green-600 "
                     : "hover:bg-green-50/50"
                 }`}
               >
-                <div className="flex flex-col justify-center md:justify-start md:flex-row gap-2 items-center p-4 cursor-pointer transition-all duration-200">
+                <div className="flex flex-col justify-center md:justify-start md:flex-row gap-2 items-center p-4 transition-all duration-200">
                   <Image
-                    className="size-10 md:size-12  mix-blend-multiply"
+                    className="size-10 md:size-12 mix-blend-multiply"
                     alt="icon"
                     height={20}
                     width={20}
@@ -93,7 +91,7 @@ const CategoriesContent = () => {
                     {category.title}
                   </span>
                 </div>
-              </Link>
+              </div>
             ))}
           </div>
         ) : (
