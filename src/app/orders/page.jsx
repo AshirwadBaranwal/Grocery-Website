@@ -170,6 +170,7 @@ const MyOrders = () => {
                               alt={item?.product?.name}
                               width={48}
                               height={48}
+                              loading="lazy"
                               className="object-contain rounded-lg"
                             />
                           ) : (
@@ -178,6 +179,7 @@ const MyOrders = () => {
                               alt="No image"
                               width={48}
                               height={48}
+                              loading="lazy"
                               className="object-contain rounded-lg"
                             />
                           )}

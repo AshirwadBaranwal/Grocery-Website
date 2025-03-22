@@ -1,6 +1,7 @@
 "use client";
 import supabase from "@/lib/SupbaseConfig";
 import Image from "next/image";
+import Link from "next/link";
 import React, { useEffect, useState } from "react";
 
 const CategoryList = () => {
@@ -36,9 +37,12 @@ const CategoryList = () => {
           <div className="grid grid-cols-4 md:grid-cols-5 lg:grid-cols-7  gap-3">
             {categoryItems?.map((items, index) => {
               return (
-                <div
+                <Link
+                  href={`/categories?category=${encodeURIComponent(
+                    items.title
+                  )}`}
                   key={index}
-                  className="flex items-center justify-center gap-2 flex-col bg-green-100 p-2 rounded-md cursor-pointer "
+                  className="flex items-center justify-center gap-2 flex-col bg-gray-100 p-2 rounded-md cursor-pointer hover:bg-gray-200 transition-all duration-300 ease-in-out"
                 >
                   <Image
                     className="size-12 mix-blend-multiply "
@@ -51,7 +55,7 @@ const CategoryList = () => {
                   <p className="font-poppins text-xs md:text-sm font-semibold text-gray-600 text-center">
                     {items.title}
                   </p>
-                </div>
+                </Link>
               );
             })}
           </div>

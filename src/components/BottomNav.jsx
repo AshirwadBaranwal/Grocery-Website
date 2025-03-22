@@ -10,7 +10,7 @@ const BottomNav = () => {
 
   const navItems = [
     { href: "/", icon: Home, label: "Home" },
-    { href: "/", icon: Grid, label: "Categories" },
+    { href: "/categories?category=Vegetables", icon: Grid, label: "Categories" },
     { href: "/orders", icon: ShoppingCart, label: "Orders" },
     { href: "/address", icon: MapPin, label: "Address" },
     { href: "/profile", icon: User, label: "Profile" },
@@ -18,10 +18,10 @@ const BottomNav = () => {
 
   return (
     <div className="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 z-50">
-      <div className="flex justify-around items-center h-16 relative">
+      <div className="grid grid-cols-5 items-center h-16 relative">
         {/* Animated background indicator */}
         <div
-          className="absolute bottom-0 h-1 bg-yellow-400 transition-all duration-300 ease-in-out"
+          className="absolute bottom-0 h-1 bg-green-400 transition-all duration-300 ease-in-out rounded-t-lg"
           style={{
             width: "20%",
             left: `${
@@ -37,7 +37,7 @@ const BottomNav = () => {
               key={item.label}
               href={item.href}
               className={`flex flex-col items-center relative transition-all duration-300 ${
-                isActive ? "text-yellow-500" : "text-gray-500"
+                isActive ? "text-green-500" : "text-gray-500"
               }`}
             >
               <div
