@@ -100,12 +100,12 @@ const MyOrders = () => {
         <div className="lg:w-1/4 space-y-2 relative ">
           <div className="bg-white rounded-lg shadow-md p-4 sticky top-20">
             <h2 className="text-lg font-semibold mb-4">Order Status</h2>
-            <div className="grid grid-cols-2 md:flex md:flex-col space-y-2 ">
+            <div className="grid grid-cols-2 md:flex md:flex-col space-y-2 gap-x-2">
               {tabs.map((tab) => (
                 <button
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id)}
-                  className={`px-4 py-2 rounded-lg text-left transition-colors ${
+                  className={`px-4 py-2 rounded-lg text-left transition-colors border border-gray-200  ${
                     activeTab === tab.id
                       ? "bg-yellow-400 text-black font-medium"
                       : "hover:bg-gray-100"
