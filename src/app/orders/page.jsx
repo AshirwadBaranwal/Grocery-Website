@@ -15,6 +15,12 @@ import {
   DialogTrigger,
   DialogClose,
 } from "@/components/ui/dialog";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 import MobileTabHead from "@/components/MobileTabHead";
 import BottomNav from "@/components/BottomNav";
 
@@ -28,7 +34,7 @@ const MyOrders = () => {
   const filteredOrders = orders
     ?.filter((order) => {
       if (activeTab === "All") return true;
-      return order.status === activeTab;
+      return order.status.toLowerCase() === activeTab.toLowerCase();
     })
     .sort((a, b) => {
       // Sort by created_at in descending order (newest first)
@@ -70,9 +76,9 @@ const MyOrders = () => {
 
   const tabs = [
     { id: "All", label: "All Orders" },
-    { id: "Pending", label: "Pending" },
-    { id: "Delivered", label: "Delivered" },
-    { id: "Cancelled", label: "Cancelled" },
+    { id: "pending", label: "Pending" },
+    { id: "delivered", label: "Delivered" },
+    { id: "cancelled", label: "Cancelled" },
   ];
 
   if (!user) {
@@ -89,12 +95,12 @@ const MyOrders = () => {
     <>
       {!isMobile && <BackBar path="/" />}
       {isMobile && <MobileTabHead TabHead="My Orders" />}
-      <div className="p-4 flex flex-col lg:flex-row gap-5 min-h-screen mt-16 mb-16">
+      <div className="p-4 flex flex-col lg:flex-row gap-5 min-h-fit mt-16 mb-16">
         {/* Side Navigation Tabs */}
         <div className="lg:w-1/4 space-y-2 relative ">
           <div className="bg-white rounded-lg shadow-md p-4 sticky top-20">
             <h2 className="text-lg font-semibold mb-4">Order Status</h2>
-            <div className="flex flex-col space-y-2">
+            <div className="grid grid-cols-2 md:flex md:flex-col space-y-2 ">
               {tabs.map((tab) => (
                 <button
                   key={tab.id}
@@ -109,7 +115,9 @@ const MyOrders = () => {
                   <span className="ml-2 text-sm text-gray-500">
                     (
                     {orders?.filter((order) =>
-                      tab.id === "All" ? true : order.status === tab.id
+                      tab.id === "All"
+                        ? true
+                        : order.status.toLowerCase() === tab.id.toLowerCase()
                     ).length || 0}
                     )
                   </span>
@@ -129,7 +137,7 @@ const MyOrders = () => {
               >
                 {/* Order Header */}
                 <div className="bg-yellow-400 p-4">
-                  <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                  <div className="grid grid-cols-1 md:grid-cols-4 gap-2 md:gap-4">
                     <div>
                       <p className="text-sm font-medium">Order ID</p>
                       <p className="text-sm">#{order.orderId}</p>
@@ -156,45 +164,65 @@ const MyOrders = () => {
                 </div>
 
                 {/* Order Items */}
-                <div className="p-4 space-y-4">
-                  {order.cartItems &&
-                    (typeof order.cartItems === "string"
-                      ? JSON.parse(order.cartItems)
-                      : order.cartItems
-                    ).map((item, index) => (
-                      <div key={index} className="flex items-center gap-3 py-2">
-                        <div className="w-12 h-12 relative">
-                          {item?.product?.images ? (
-                            <Image
-                              src={item?.product?.images.trim()}
-                              alt={item?.product?.name}
-                              width={48}
-                              height={48}
-                              loading="lazy"
-                              className="object-contain rounded-lg"
-                            />
-                          ) : (
-                            <Image
-                              src="https://www.freeiconspng.com/thumbs/no-image-icon/no-image-icon-6.png"
-                              alt="No image"
-                              width={48}
-                              height={48}
-                              loading="lazy"
-                              className="object-contain rounded-lg"
-                            />
-                          )}
+                <div className="p-4">
+                  <Accordion type="single" collapsible className="w-full">
+                    <AccordionItem value="items">
+                      <AccordionTrigger className="text-base font-medium no-underline ">
+                        Order Items (
+                        {order.cartItems &&
+                          (typeof order.cartItems === "string"
+                            ? JSON.parse(order.cartItems)
+                            : order.cartItems
+                          ).length}
+                        )
+                      </AccordionTrigger>
+                      <AccordionContent>
+                        <div className="space-y-4 pt-4">
+                          {order.cartItems &&
+                            (typeof order.cartItems === "string"
+                              ? JSON.parse(order.cartItems)
+                              : order.cartItems
+                            ).map((item, index) => (
+                              <div
+                                key={index}
+                                className="flex items-center gap-3 py-2"
+                              >
+                                <div className="w-12 h-12 relative">
+                                  {item?.product?.images ? (
+                                    <Image
+                                      src={item?.product?.images.trim()}
+                                      alt={item?.product?.name}
+                                      width={48}
+                                      height={48}
+                                      loading="lazy"
+                                      className="object-contain rounded-lg"
+                                    />
+                                  ) : (
+                                    <Image
+                                      src="https://www.freeiconspng.com/thumbs/no-image-icon/no-image-icon-6.png"
+                                      alt="No image"
+                                      width={48}
+                                      height={48}
+                                      loading="lazy"
+                                      className="object-contain rounded-lg"
+                                    />
+                                  )}
+                                </div>
+                                <div className="flex-1">
+                                  <h3 className="text-base font-medium">
+                                    {item?.product?.name}
+                                  </h3>
+                                  <p className="text-sm text-gray-600">
+                                    {item?.product?.itemQuantityType} |{" "}
+                                    {item?.quantity} Qty.
+                                  </p>
+                                </div>
+                              </div>
+                            ))}
                         </div>
-                        <div className="flex-1">
-                          <h3 className="text-base font-medium">
-                            {item?.product?.name}
-                          </h3>
-                          <p className="text-sm text-gray-600">
-                            {item?.product?.itemQuantityType} | {item?.quantity}{" "}
-                            Qty.
-                          </p>
-                        </div>
-                      </div>
-                    ))}
+                      </AccordionContent>
+                    </AccordionItem>
+                  </Accordion>
                 </div>
 
                 {/* Order Status and Actions */}
